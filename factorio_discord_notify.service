@@ -1,0 +1,14 @@
+[Unit]
+Description=Factorio Discord Notify Bot
+
+[Service]
+Type=simple
+User=factorio
+Group=factorio
+ExecStart=/usr/bin/python3 /opt/factorio/factorio-discord-notify/factorio_discord_notify.py
+WorkingDirectory=/opt/factorio/factorio-discord-notify/f
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
