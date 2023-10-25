@@ -4,13 +4,16 @@ import os
 import shutil
 import subprocess
 import logging
+from os.path import join, dirname
 from discord.ext import tasks
+from dotenv import load_dotenv
+
+# Initial dotenv
+load_dotenv()
 
 # Discord Bot Token
-TOKEN = ''
-
-# Discord Channel ID
-channel_id = '1161082620415852614'
+TOKEN = os.environ.get("TOKEN")
+CHANNEL_ID = os.environ.get("CHANNEL_ID")
 channel = None
 
 # Factorio console-log path
@@ -35,7 +38,7 @@ async def on_ready():
     global channel
     logging.info(f'Logged in as {client.user.name}')
     logging.info(f'Get Server: {client.guilds[0].name}(ID:{client.guilds[0].id})')
-    channel = client.get_channel(int(channel_id))
+    channel = client.get_channel(int(CHANNEL_ID))
     logging.info(f'Get Channel: {channel}.')
 
     if not os.path.exists(console_log_path):
