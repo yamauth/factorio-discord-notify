@@ -2,9 +2,7 @@ import discord
 import asyncio
 import os
 import shutil
-import subprocess
 import logging
-from os.path import join, dirname
 from discord.ext import tasks
 from dotenv import load_dotenv
 
@@ -17,8 +15,8 @@ CHANNEL_ID = os.environ.get("CHANNEL_ID")
 channel = None
 
 # Factorio console-log path
-console_log_path      = '/opt/factorio/factorio/console-log'
-console_log_path_prev = '{console_log_path}.prev'
+console_log_path      = f'/opt/factorio/factorio/console-log'
+console_log_path_prev = f'{console_log_path}.prev'
 
 # Discord Client setting
 intents = discord.Intents.default()
@@ -28,9 +26,9 @@ client = discord.Client(intents=intents)
 
 # Logging
 logging.basicConfig(
-    level=logging.DEBUG,
-    filename='discord-notify.log',
-    format='%(asctime)s %(levelname)s %(message)s'
+    level = logging.DEBUG,
+    filename = 'notify.log',
+    format = '%(asctime)s %(levelname)s %(message)s'
     )
 
 @client.event
@@ -52,30 +50,34 @@ async def on_ready():
 
 @tasks.loop(seconds=10)
 async def loop():
-    global last_modified
     await client.wait_until_ready()
 
     try:
         logging.info(f'Check Diff')
 
         # Diff current log and prev file
-        # If add lines, send message
-        with open(console_log_path, 'r') as current_file, open(console_log_path_prev, 'r') as prev_file:
-            search_strings = ['JOIN', 'LEAVE']
-            add_lines = [
-                line
-                for line in set(prev_file.readlines()) - set(current_file.readlines())
-                if any(search in line for search in search_strings)
-            ]
+        # If new lines, send message
+        with open(console_log_path, 'r') as current_file:
+            current_lines = current_file.readlines()
 
-            if len(add_lines) == 0:
-                logging.info(f'No new lines')
-                return
+        with open(console_log_path_prev, 'r') as prev_file:
+            prev_lines = prev_file.readlines()
 
-            logging.info(f'Add lines: {add_lines}')
-            await channel.send(add_lines)
+        search_strings = ['JOIN', 'LEAVE']
+        new_lines = [
+            line
+            for line in current_lines
+            if line not in prev_lines and any(search in line for search in search_strings)
+        ]
 
-            shutil.copy(console_log_path, console_log_path_prev)
+        if len(new_lines) == 0:
+            logging.info(f'No new lines')
+            return
+
+        logging.info(f'Add lines: {new_lines}')
+        await channel.send(new_lines)
+
+        shutil.copy(console_log_path, console_log_path_prev)
 
     except FileNotFoundError:
         pass
