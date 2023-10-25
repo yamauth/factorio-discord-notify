@@ -5,8 +5,8 @@ Description=Factorio Discord Notify Bot
 Type=simple
 User=factorio
 Group=factorio
-ExecStart=/usr/bin/python3 /opt/factorio/factorio-discord-notify/factorio_discord_notify.py
-WorkingDirectory=/opt/factorio/factorio-discord-notify/f
+ExecStart=/usr/bin/python3 /opt/factorio/factorio-discord-notify/notify.py
+WorkingDirectory=/opt/factorio/factorio-discord-notify/
 Restart=always
 RestartSec=5
 

@@ -31,8 +31,9 @@ Restart=always
 
 [Install]
 WantedBy=multi-user.target
-
 ```
 その後、適宜、サービスを再起動する。
+```
 systemctl stop factorio.service
 systemctl start factorio.service
+```
