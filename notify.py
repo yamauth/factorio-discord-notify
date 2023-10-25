@@ -65,7 +65,7 @@ async def loop():
 
         search_strings = ['JOIN', 'LEAVE']
         new_lines = [
-            line
+            line.strip()
             for line in current_lines
             if line not in prev_lines and any(search in line for search in search_strings)
         ]
@@ -75,7 +75,7 @@ async def loop():
             return
 
         logging.info(f'Add lines: {new_lines}')
-        await channel.send(new_lines)
+        await channel.send('\n'.join(new_lines))
 
         shutil.copy(console_log_path, console_log_path_prev)
 
