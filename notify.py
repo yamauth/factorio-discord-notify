@@ -3,10 +3,15 @@ import asyncio
 import os
 import shutil
 import logging
+import sys
 from discord.ext import tasks
 from dotenv import load_dotenv
+from logging.handlers import RotatingFileHandler
 
 # Initial dotenv
+if not os.path.exists('.env'):
+    logging.error(".env is not exists\n\'Example:\nTOKEN=MTE2MTEw...\nCHANNEL_ID=11610...'")
+    sys.exit(1)
 load_dotenv()
 
 # Discord Bot Token
@@ -27,8 +32,8 @@ client = discord.Client(intents=intents)
 # Logging
 logging.basicConfig(
     level = logging.DEBUG,
-    filename = 'notify.log',
-    format = '%(asctime)s %(levelname)s %(message)s'
+    format = '%(asctime)s %(levelname)s %(message)s',
+    handlers=[RotatingFileHandler('notify.log', maxBytes=10*1024*1024, backupCount=3)]
     )
 
 @client.event
@@ -36,8 +41,9 @@ async def on_ready():
     global channel
     logging.info(f'Logged in as {client.user.name}')
     logging.info(f'Get Server: {client.guilds[0].name}(ID:{client.guilds[0].id})')
+
     channel = client.get_channel(int(CHANNEL_ID))
-    logging.info(f'Get Channel: {channel}.')
+    logging.info(f'Get Channel: {channel}')
 
     if not os.path.exists(console_log_path):
         raise FileNotFoundError(f'{console_log_path} is not exists')
@@ -56,7 +62,7 @@ async def loop():
         logging.info(f'Check Diff')
 
         # Diff current log and prev file
-        # If new lines, send message
+        # If new lines, send discord message
         with open(console_log_path, 'r') as current_file:
             current_lines = current_file.readlines()
 
@@ -79,7 +85,7 @@ async def loop():
 
         shutil.copy(console_log_path, console_log_path_prev)
 
-    except FileNotFoundError:
-        pass
+    except FileNotFoundError as e:
+        logging.error(f'FileNotFoundError: {e}')
 
 client.run(TOKEN)
