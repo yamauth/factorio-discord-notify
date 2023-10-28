@@ -35,5 +35,5 @@ sudo systemctl start factorio
 ll factorio/console-log
 
 sudo systemctl enable factorio_discord_notify
-sudo systemctl start factorio
+sudo systemctl start factorio_discord_notify
 ```
