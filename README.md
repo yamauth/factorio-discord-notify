@@ -1,8 +1,16 @@
 # factorio-discord-notify
-factorioのconsole-logを監視し、誰かがJOIN/LEAVEしたときDiscordへ通知するBotです。factorio headlessが動作しているサーバへのインストールが必須要件です。ディレクトリ構成や設定は、<conoha.jp>で構築したサーバを前提にしている。
+factorioのconsole-logを監視し、誰かがJOIN/LEAVEしたときDiscordへ通知するBot。factorio headlessが動作しているサーバへインストールして利用する。ディレクトリ構成や設定は、 conoha.jp で構築したサーバを前提にしている。具体的には `/opt/factorio/factorio` へ `factorio:factorio` の権限でインストールされている前提。
 
 ## Usage
 ### Install Package
+```
+yum install git
+cd /opt/factorio/
+git clone https://github.com/yamauth/factorio-discord-notify.git
+
+```
+
+
 ```
 apt update
 apt install python3-pip
