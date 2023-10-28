@@ -1,0 +1,14 @@
+[Unit]
+Description=Factorio headless Server
+After=network.target nss-lookup.target
+
+[Service]
+Type=simple
+User=factorio
+Group=factorio
+WorkingDirectory=/opt/factorio
+ExecStart=/opt/factorio/bin/x64/factorio --start-server /opt/factorio/saves/save.zip --console-log /opt/factorio/factorio/console-log
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
