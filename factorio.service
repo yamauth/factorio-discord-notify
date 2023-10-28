@@ -7,7 +7,7 @@ Type=simple
 User=factorio
 Group=factorio
 WorkingDirectory=/opt/factorio
-ExecStart=/opt/factorio/bin/x64/factorio --start-server /opt/factorio/saves/save.zip --console-log /opt/factorio/factorio/console-log
+ExecStart=/opt/factorio/bin/x64/factorio --start-server /opt/factorio/saves/save.zip --console-log /opt/factorio/console-log
 Restart=always
 
 [Install]
