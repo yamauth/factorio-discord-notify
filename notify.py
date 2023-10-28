@@ -20,7 +20,7 @@ CHANNEL_ID = os.environ.get("CHANNEL_ID")
 channel = None
 
 # Factorio console-log path
-console_log_path      = f'/opt/factorio/factorio/console-log'
+console_log_path      = f'/opt/factorio/console-log'
 console_log_path_prev = f'{console_log_path}.prev'
 
 # Discord Client setting
