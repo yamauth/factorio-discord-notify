@@ -46,11 +46,12 @@ async def on_ready():
     logging.info(f'Get Channel: {channel}')
 
     if not os.path.exists(console_log_path):
-        raise FileNotFoundError(f'{console_log_path} is not exists')
+        logging.error(f'{console_log_path} is not exists')
 
     # when first run, make prev file
     if not os.path.exists(console_log_path_prev):
         shutil.copy(console_log_path, console_log_path_prev)
+        logging.info(f'Copied from {console_log_path} to {console_log_path_prev}')
 
     loop.start()
 
@@ -69,7 +70,7 @@ async def loop():
         with open(console_log_path_prev, 'r') as prev_file:
             prev_lines = prev_file.readlines()
 
-        search_strings = ['JOIN', 'LEAVE']
+        search_strings = ['JOIN', 'LEAVE'] # and more keywords
         new_lines = [
             line.strip()
             for line in current_lines
