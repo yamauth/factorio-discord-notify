@@ -1,24 +1,31 @@
 # factorio-discord-notify
 factorioのconsole-logを監視し、誰かがJOIN/LEAVEしたときDiscordへ通知するBotです。factorio headlessが動作しているサーバへインストールして利用します。
-本Botをsystemdに登録するserviceファイルだけではなく、factorio本体をsystemdに登録するserviceファイルも含みます。また、README.mdのUsageには、facotiro本体のインストールを含みます。
+本Botをsystemdに登録するserviceファイルだけではなく、factorio本体をsystemdに登録するserviceファイルも含みます。
+README.mdのUsageには、facotiro本体のインストールと、サードパーティ製のアップデートスクリプト（factorio-updater）の設定を含みます。
 
 ## Usage
 ### Install Package
 ```
 sudo yum install git python3-pip -y
-pip install python-dotenv discord.py
+pip install python-dotenv discord.py requests
 ```
 
 ### Download files
 ```
 cd /opt
 sudo git clone https://github.com/yamauth/factorio-discord-notify.git
+sudo git clone https://github.com/narc0tiq/factorio-updater.git
 sudo curl -o factorio.tar -OL https://www.factorio.com/get-download/1.1.91/headless/linux64
 sudo tar xf factorio.tar
 sudo rm factorio.tar
 
 sudo useradd factorio
-sudo chown -R factorio:factorio factorio factorio-discord-notify
+sudo chown -R factorio:factorio factorio factorio-discord-notify factorio-updater
+```
+
+### Update files
+```
+sudo -u factorio python3 factorio-updater/update_factorio.py --apply-to factorio/bin/x64/factorio
 ```
 
 ### Settings
@@ -37,4 +44,12 @@ ll factorio/console-log
 
 sudo systemctl enable factorio_discord_notify
 sudo systemctl start factorio_discord_notify
+```
+
+## When factorio update
+```
+cd /opt
+sudo systemctl stop factorio
+sudo -u factorio python3 factorio-updater/update_factorio.py --apply-to factorio/bin/x64/factorio
+sudo systemctl start factorio
 ```
